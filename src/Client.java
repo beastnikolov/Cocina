@@ -36,9 +36,68 @@ public class Client implements Runnable {
     public void run() {
         Random random = new Random();
         while (go) {
+            try {
+                movetoTable(table);
+                movetoExit(table);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             if (random.nextInt(500) == 5) {
                 takeDish();
             }
+        }
+    }
+
+    private void movetoTable(Table table) throws InterruptedException {
+        while (yPos > table.getyPos() + 140) {
+            yPos--;
+            Thread.sleep(10);
+        }
+        if (table.getTableType().equals("Fish")) {
+            while (xPos > table.getxPos() + 50) {
+                xPos--;
+                Thread.sleep(10);
+            }
+            while (yPos > table.getyPos() + 100) {
+                yPos--;
+                Thread.sleep(10);
+            }
+        } else {
+            while (xPos < table.getxPos() + 50) {
+                xPos++;
+                Thread.sleep(10);
+            }
+            while (yPos > table.getyPos() + 100) {
+                yPos--;
+                Thread.sleep(10);
+            }
+        }
+
+    }
+
+    private void movetoExit(Table table) throws InterruptedException {
+        if (table.getTableType().equals("Fish")) {
+            while (yPos < table.getyPos()+150) {
+                yPos++;
+                Thread.sleep(10);
+            }
+            while (xPos < table.getxPos() + 100) {
+                xPos++;
+                Thread.sleep(10);
+            }
+        } else {
+            while (yPos < table.getyPos() +150) {
+                yPos++;
+                Thread.sleep(10);
+            }
+            while (xPos > table.getxPos() - 100) {
+                xPos--;
+                Thread.sleep(10);
+            }
+        }
+        while (yPos < 720) {
+            yPos++;
+            Thread.sleep(10);
         }
     }
 

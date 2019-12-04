@@ -64,15 +64,15 @@ public class Viewer extends Canvas implements Runnable{
     }
 
     private void createClients() {
-        client = new Client(1,table,370,380,"Male");
+        client = new Client(1,tableB,430,720,"Male");
         thread = new Thread(client);
         thread.start();
         clientArrayList.add(client);
-        client = new Client(2,table,400,380,"Female");
+        client = new Client(2,table,430,720,"Female");
         thread = new Thread(client);
         thread.start();
         clientArrayList.add(client);
-        client = new Client(3,table,430,380,"Female");
+        client = new Client(3,table,430,720,"Female");
         thread = new Thread(client);
         thread.start();
         clientArrayList.add(client);
