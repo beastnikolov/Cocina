@@ -36,7 +36,7 @@ public class Table {
 
     public void drawTable(Graphics g) {
         g.setColor(Color.red);
-        g.drawRect(xPos, yPos, 190, 60);
+       // g.drawRect(xPos, yPos, 190, 60);
     }
 
     public void drawDishes(Graphics g) {

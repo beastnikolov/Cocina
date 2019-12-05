@@ -13,12 +13,14 @@ public class Chef implements Runnable {
     private int xPos;
     private int yPos;
     private BufferedImage sprite;
+    private int movementVariation;
 
-    public Chef(int id,Table table,int xPos, int yPos) {
+    public Chef(int id,Table table,int xPos, int yPos,int movementVariation) {
         this.id = id;
         this.table = table;
         this.xPos = xPos;
         this.yPos = yPos;
+        this.movementVariation = movementVariation;
         try {
             sprite = ImageIO.read(new File("src//zchef.png"));
         } catch (IOException e) {
@@ -28,15 +30,14 @@ public class Chef implements Runnable {
 
     @Override
     public void run() {
+        Random random = new Random();
         while (go) {
             movetoKitchen();
             movetoCounter();
-            Random random = new Random();
-            if (random.nextInt(500) == 4) {
-                Cook(random.nextInt(4));
+            Cook(random.nextInt(4));
             }
         }
-    }
+
 
     public void drawChef(Graphics g) {
         if (!inKitchen) {
@@ -50,15 +51,10 @@ public class Chef implements Runnable {
         } else {
             table.putDish(id,dishes);
         }
-        try {
-            Thread.sleep(6000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     private void movetoKitchen() {
-        while (xPos > 160) {
+        while (xPos > 160 + movementVariation) {
             xPos--;
             try {
                 Thread.sleep(10);
@@ -66,7 +62,7 @@ public class Chef implements Runnable {
                 e.printStackTrace();
             }
         }
-        while (yPos > 180) {
+        while (yPos > 180 + movementVariation) {
             yPos--;
             try {
                 Thread.sleep(10);
@@ -76,7 +72,7 @@ public class Chef implements Runnable {
         }
         inKitchen = true;
         try {
-            Thread.sleep(100);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -92,13 +88,18 @@ public class Chef implements Runnable {
                 e.printStackTrace();
             }
         }
-        while (xPos < 400) {
+        while (xPos < 400 + movementVariation) {
             xPos++;
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
