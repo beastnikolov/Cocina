@@ -21,11 +21,20 @@ public class Chef implements Runnable {
         this.xPos = xPos;
         this.yPos = yPos;
         this.movementVariation = movementVariation;
-        try {
-            sprite = ImageIO.read(new File("src//zchef.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (table.getTableType().equals("Fish")) {
+            try {
+                sprite = ImageIO.read(new File("src//zchef2.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                sprite = ImageIO.read(new File("src//zchef.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
     @Override
@@ -54,6 +63,7 @@ public class Chef implements Runnable {
     }
 
     private void movetoKitchen() {
+        Random random = new Random();
         while (xPos > 160 + movementVariation) {
             xPos--;
             try {
@@ -72,7 +82,11 @@ public class Chef implements Runnable {
         }
         inKitchen = true;
         try {
-            Thread.sleep(5000);
+            if (random.nextInt(2) == 0) {
+                Thread.sleep(5000);
+            } else {
+                Thread.sleep(4000);
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

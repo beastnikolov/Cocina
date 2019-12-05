@@ -127,12 +127,12 @@ public class Client implements Runnable {
         g.drawImage(sprite,xPos,yPos,64,64,null);
         g.setColor(Color.white);
         g.setFont(new Font("MS Gothic",Font.PLAIN,10));
-        g.drawString(name,xPos+name.length(),yPos);
+        g.drawString(name,xPos+20,yPos);
     }
 
     private void takeDish() throws InterruptedException {
         Thread.sleep(200);
-        table.takeDish(id);
+        table.takeDish(id,name);
         Thread.sleep(100);
         pay();
     }

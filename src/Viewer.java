@@ -24,8 +24,8 @@ public class Viewer extends Canvas implements Runnable {
     private ArrayList<Client> clientArrayList = new ArrayList<>();
     private ArrayList<Table> tableArrayList = new ArrayList<>();
     private BufferedImage tavernSprite;
-    private String[] MnameArray = {"Mario","Pere","Jose","Sergi","Pascual","Salvador"};
-    private String[] FnameArray = {"Laura","Antonia","Silvia","Maria","Patricia"};
+    private String[] MnameArray = {"Mario","Pere","Jose","Sergi","Toni","Pepe"};
+    private String[] FnameArray = {"Laura","Sandra","Silvia","Maria","Lisa"};
 
     public Viewer(){
         this.setBackground(Color.black);
