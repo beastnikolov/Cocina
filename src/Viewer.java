@@ -64,15 +64,15 @@ public class Viewer extends Canvas implements Runnable{
     }
 
     private void createClients() {
-        client = new Client(1,tableB,430,720,"Male");
+        client = new Client(1,tableB,430,720,"Male",clientArrayList);
         thread = new Thread(client);
         thread.start();
         clientArrayList.add(client);
-        client = new Client(2,table,430,720,"Female");
+        client = new Client(2,table,430,720,"Female",clientArrayList);
         thread = new Thread(client);
         thread.start();
         clientArrayList.add(client);
-        client = new Client(3,table,430,720,"Female");
+        client = new Client(3,table,430,720,"Female",clientArrayList);
         thread = new Thread(client);
         thread.start();
         clientArrayList.add(client);
@@ -100,7 +100,9 @@ public class Viewer extends Canvas implements Runnable{
             c.drawChef(graphics);
         }
         for (Client cl: clientArrayList) {
-            cl.drawClient(graphics);
+            if (cl!=null) {
+                cl.drawClient(graphics);
+            }
         }
         bs.show();
         super.paint(graphics);

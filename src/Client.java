@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Client implements Runnable {
@@ -13,13 +14,15 @@ public class Client implements Runnable {
     private int xPos;
     private int yPos;
     private BufferedImage sprite;
+    private ArrayList<Client> clientArrayList;
 
-    public Client(int id,Table table,int xPos, int yPos,String gender) {
+    public Client(int id, Table table, int xPos, int yPos, String gender, ArrayList<Client> clientArrayList) {
         this.id = id;
         this.table = table;
         this.xPos = xPos;
         this.yPos = yPos;
         this.Gender = gender;
+        this.clientArrayList = clientArrayList;
         try {
             if (this.Gender.equals("Male")) {
                 sprite = ImageIO.read(new File("src//zman.png"));
@@ -81,7 +84,7 @@ public class Client implements Runnable {
                 yPos++;
                 Thread.sleep(10);
             }
-            while (xPos < table.getxPos() + 100) {
+            while (xPos < table.getxPos() + 200) {
                 xPos++;
                 Thread.sleep(10);
             }
@@ -90,7 +93,7 @@ public class Client implements Runnable {
                 yPos++;
                 Thread.sleep(10);
             }
-            while (xPos > table.getxPos() - 100) {
+            while (xPos > table.getxPos() - 50) {
                 xPos--;
                 Thread.sleep(10);
             }
@@ -99,7 +102,14 @@ public class Client implements Runnable {
             yPos++;
             Thread.sleep(10);
         }
+        leaveRestaurant();
     }
+
+    public void leaveRestaurant() {
+        clientArrayList.remove(this);
+        go = false;
+    }
+
 
     public void drawClient(Graphics g){
         g.drawImage(sprite,xPos,yPos,64,64,null);
