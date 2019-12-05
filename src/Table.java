@@ -57,7 +57,7 @@ public class Table {
     public synchronized void takeDish(int id,String name) {
         while (tableEmpty) {
             try {
-                System.out.println("Client: " + name + " | ID: " + id + " is waiting for a dish.");
+              //  System.out.println("Client: " + name + " | ID: " + id + " is waiting for a dish.");
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -67,12 +67,12 @@ public class Table {
             tableEmpty = true;
         } else {
             this.dishes--;
-            System.out.println("Client: " + name + " | ID: " + id + " has taken a dish.");
+           // System.out.println("Client: " + name + " | ID: " + id + " has taken a dish.");
         }
     }
 
     public synchronized void putDish(int id, int numberofDishes) {
-        System.out.println("Chef ID: " + id + " added " + numberofDishes + " dishes to the table");
+       // System.out.println("Chef ID: " + id + " added " + numberofDishes + " dishes to the table");
         this.dishes = this.dishes + numberofDishes;
         if (this.dishes > 6) {
             this.dishes = 6;

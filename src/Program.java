@@ -26,7 +26,7 @@ public class Program extends JFrame {
     private void pintarCanvas() {
         GridBagConstraints gbc = new GridBagConstraints();
 
-        gbc.gridx = 0;
+        gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weighty = 1;
         gbc.weightx = 1;

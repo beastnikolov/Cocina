@@ -1,11 +1,14 @@
-import javafx.scene.control.Tab;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -26,14 +29,43 @@ public class Viewer extends Canvas implements Runnable {
     private BufferedImage tavernSprite;
     private String[] MnameArray = {"Mario","Pere","Jose","Sergi","Toni","Pepe"};
     private String[] FnameArray = {"Laura","Sandra","Silvia","Maria","Lisa"};
+    private boolean inShop = false;
+
 
     public Viewer(){
+        Shop shop = new Shop(this);
+        shop.setVisible(false);
         this.setBackground(Color.black);
         try {
             tavernSprite = ImageIO.read(new File("src//ztavern.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent keyEvent) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+                int key = keyEvent.getKeyCode();
+                if (key == KeyEvent.VK_B) {
+                    System.out.println("SHOP");
+                    shop.setVisible(true);
+                    inShop = true;
+
+                }
+                if (inShop) {
+                    shop.setVisible(false);
+                    inShop = false;
+                }
+            }
+        });
     }
 
     @Override
@@ -140,6 +172,9 @@ public class Viewer extends Canvas implements Runnable {
         return new Client(client_id,name,tableChoice,430,720,gender,clientArrayList,movementVariation,this);
     }
 
+
+
+
     public static int getGold() {
         return gold;
     }
@@ -147,4 +182,5 @@ public class Viewer extends Canvas implements Runnable {
     public static void setGold(int gold) {
         Viewer.gold = gold;
     }
+
 }
