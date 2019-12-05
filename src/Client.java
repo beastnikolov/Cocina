@@ -18,6 +18,7 @@ public class Client implements Runnable {
     private int movementVariation;
     private Viewer viewer;
     private ArrayList<Client> clientArrayList;
+    private boolean eaten = false;
 
 
     public Client(int id,String name, Table table, int xPos, int yPos, String gender, ArrayList<Client> clientArrayList,int movementVariation,Viewer viewer) {
@@ -52,16 +53,17 @@ public class Client implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (random.nextInt(500) == 5) {
-                try {
-                    takeDish();
+            try {
+                takeDish();
+                if (eaten) {
                     movetoExit(table);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             }
         }
-    }
+
 
     private void movetoTable(Table table) throws InterruptedException {
         while (yPos > table.getyPos() + 140 + movementVariation) {
@@ -135,6 +137,7 @@ public class Client implements Runnable {
         table.takeDish(id,name);
         Thread.sleep(100);
         pay();
+        eaten = true;
     }
 
     private void pay() {

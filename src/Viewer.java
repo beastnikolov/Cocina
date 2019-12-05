@@ -60,10 +60,6 @@ public class Viewer extends Canvas implements Runnable {
                     inShop = true;
 
                 }
-                if (inShop) {
-                    shop.setVisible(false);
-                    inShop = false;
-                }
             }
         });
     }
@@ -81,7 +77,7 @@ public class Viewer extends Canvas implements Runnable {
         createClients();
         while (go) {
             this.paint();
-            if (random.nextInt(500) == 1) {
+            if (random.nextInt(50000) == 1) {
                 createClients();
             }
 
@@ -102,7 +98,7 @@ public class Viewer extends Canvas implements Runnable {
     private void createTables() {
         table = new Table(6,220,325,"Fish");
         tableArrayList.add(table);
-        tableB = new Table(4,480,325,"Cake");
+        tableB = new Table(6,480,325,"Cake");
         tableArrayList.add(tableB);
     }
 
@@ -128,6 +124,8 @@ public class Viewer extends Canvas implements Runnable {
         graphics.setFont(new Font("MS Gothic",Font.PLAIN,10));
         graphics.drawImage(goldSprite,930,720,null);
         graphics.drawString(String.valueOf(gold),965,740);
+        graphics.drawString(String.valueOf(table.getDishes()),965,710);
+        graphics.drawString(String.valueOf(tableB.getDishes()),965,680);
         for (Table t: tableArrayList) {
             t.drawTable(graphics);
             t.drawDishes(graphics);

@@ -36,7 +36,7 @@ public class Table {
 
     public void drawTable(Graphics g) {
         g.setColor(Color.red);
-       // g.drawRect(xPos, yPos, 190, 60);
+        //g.drawRect(xPos, yPos, 190, 60);
     }
 
     public void drawDishes(Graphics g) {
@@ -45,8 +45,10 @@ public class Table {
         g.setColor(Color.red);
         if (tableType.equals("Fish")) {
             whiteSpace = 0;
+            g.drawImage(dishSprite,930,695,20,20,null);
         } else {
             whiteSpace = 40;
+            g.drawImage(dishSprite,930,665,20,20,null);
         }
         for (int i = 0; i < dishes; i++) {
             g.drawImage(dishSprite,xPos+whiteSpace, yPos+20,32,32, null);
@@ -57,7 +59,7 @@ public class Table {
     public synchronized void takeDish(int id,String name) {
         while (tableEmpty) {
             try {
-              //  System.out.println("Client: " + name + " | ID: " + id + " is waiting for a dish.");
+                System.out.println("Client: " + name + " | ID: " + id + " is waiting for a dish.");
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -67,18 +69,24 @@ public class Table {
             tableEmpty = true;
         } else {
             this.dishes--;
-           // System.out.println("Client: " + name + " | ID: " + id + " has taken a dish.");
+            System.out.println("Client: " + name + " | ID: " + id + " has taken a dish.");
         }
     }
 
     public synchronized void putDish(int id, int numberofDishes) {
-       // System.out.println("Chef ID: " + id + " added " + numberofDishes + " dishes to the table");
+        System.out.println("Chef ID: " + id + " added " + numberofDishes + " dishes to the table");
         this.dishes = this.dishes + numberofDishes;
         if (this.dishes > 6) {
             this.dishes = 6;
         }
         tableEmpty = false;
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         notifyAll();
+        System.out.println("Table " +  this.getTableType() + " | Current dishes: " + dishes);
     }
 
     public int getDishes() {
