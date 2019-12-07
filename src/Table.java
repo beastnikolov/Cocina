@@ -11,6 +11,7 @@ public class Table {
     private String tableType;
     private int xPos;
     private int yPos;
+    private int currentUpgrade = 2;
 
 
     public Table(int dishes,int xPos,int yPos,String tableType) {
@@ -18,20 +19,40 @@ public class Table {
         this.xPos = xPos;
         this.yPos = yPos;
         this.tableType = tableType;
-        if (tableType.equals("Fish")) {
-            try {
-                dishSprite = ImageIO.read(new File("src//zdish.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            loadTableSprites();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadTableSprites() throws IOException {
+        if (tableType.equals("TableA")) {
+            if (currentUpgrade == 0) {
+                dishSprite = ImageIO.read(new File("src//Sprites//Food//zfoodTableA1.png"));
+            } else if (currentUpgrade == 1) {
+                dishSprite = ImageIO.read(new File("src//Sprites//Food//zfoodTableA2.png"));
+            } else if (currentUpgrade == 2) {
+                dishSprite = ImageIO.read(new File("src//Sprites//Food//zfoodTableA3.png"));
             }
-        } else {
-            try {
-                dishSprite = ImageIO.read(new File("src//zcake.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
+
+        } else if (tableType.equals("TableB")) {
+            if (currentUpgrade == 0) {
+                dishSprite = ImageIO.read(new File("src//Sprites//Food//zfoodTableB1.png"));
+            } else if (currentUpgrade == 1) {
+                dishSprite = ImageIO.read(new File("src//Sprites//Food//zfoodTableB2.png"));
+            } else if (currentUpgrade == 2) {
+                dishSprite = ImageIO.read(new File("src//Sprites//Food//zfoodTableB3.png"));
+            }
+        } else if (tableType.equals("TableC")) {
+            if (currentUpgrade == 0) {
+                dishSprite = ImageIO.read(new File("src//Sprites//Food//zfoodTableDrink.png"));
+            } else if (currentUpgrade == 1) {
+                dishSprite = ImageIO.read(new File("src//Sprites//Food//zfoodTableDrink2.png"));
+            } else if (currentUpgrade == 2) {
+                dishSprite = ImageIO.read(new File("src//Sprites//Food//zfoodTableDrink3.png"));
             }
         }
-
     }
 
     public void drawTable(Graphics g) {
@@ -43,38 +64,42 @@ public class Table {
         int whiteSpace = 0;
 
         g.setColor(Color.red);
-        if (tableType.equals("Fish")) {
+        if (tableType.equals("TableA")) {
             whiteSpace = 0;
-            g.drawImage(dishSprite,930,695,20,20,null);
-        } else {
-            whiteSpace = 40;
-            g.drawImage(dishSprite,930,665,20,20,null);
+            g.drawImage(dishSprite,930,695,16,16,null);
+        } else if (tableType.equals("TableB")) {
+            whiteSpace = 0;
+            g.drawImage(dishSprite,930,665,16,16,null);
+        } else if (tableType.equals("TableC")) {
+            whiteSpace = 0;
+            g.drawImage(dishSprite,930,635,16,16,null);
         }
         for (int i = 0; i < dishes; i++) {
-            g.drawImage(dishSprite,xPos+whiteSpace, yPos+20,32,32, null);
-            whiteSpace = whiteSpace + 30;
+            g.drawImage(dishSprite,xPos+whiteSpace, yPos+20,16,16, null);
+            whiteSpace = whiteSpace + 12;
         }
     }
 
-    public synchronized void takeDish(int id,String name) {
+    public synchronized void takeDish(Client client) {
         while (tableEmpty) {
             try {
-                System.out.println("Client: " + name + " | ID: " + id + " is waiting for a dish.");
+                //System.out.println("Client: " + client.getName() + " | ID: " + client.getId() + " is waiting for a dish.");
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        if (dishes == 0) {
+        if (dishes <= 0) {
             tableEmpty = true;
         } else {
             this.dishes--;
-            System.out.println("Client: " + name + " | ID: " + id + " has taken a dish.");
+            client.setEaten(true);
+            //System.out.println("Client: " + client.getName() + " | ID: " + client.getId() + " has taken a dish.");
         }
     }
 
     public synchronized void putDish(int id, int numberofDishes) {
-        System.out.println("Chef ID: " + id + " added " + numberofDishes + " dishes to the table");
+        //System.out.println("Chef ID: " + id + " added " + numberofDishes + " dishes to the table");
         this.dishes = this.dishes + numberofDishes;
         if (this.dishes > 6) {
             this.dishes = 6;
@@ -86,7 +111,7 @@ public class Table {
             e.printStackTrace();
         }
         notifyAll();
-        System.out.println("Table " +  this.getTableType() + " | Current dishes: " + dishes);
+        //System.out.println("Table " +  this.getTableType() + " | Current dishes: " + dishes);
     }
 
     public int getDishes() {

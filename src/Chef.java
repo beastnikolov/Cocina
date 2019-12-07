@@ -1,4 +1,5 @@
 import javax.imageio.ImageIO;
+import javax.swing.plaf.synth.SynthUI;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -14,6 +15,8 @@ public class Chef implements Runnable {
     private int yPos;
     private BufferedImage sprite;
     private int movementVariation;
+    private String facing = "front";
+    private String chefType = "";
 
     public Chef(int id,Table table,int xPos, int yPos,int movementVariation) {
         this.id = id;
@@ -21,18 +24,41 @@ public class Chef implements Runnable {
         this.xPos = xPos;
         this.yPos = yPos;
         this.movementVariation = movementVariation;
-        if (table.getTableType().equals("Fish")) {
-            try {
-                sprite = ImageIO.read(new File("src//zchef2.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                sprite = ImageIO.read(new File("src//zchef.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            loadImages();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private void loadImages() throws IOException {
+        if (table.getTableType().equals("TableA")) {
+            this.chefType = "chefA";
+            sprite = ImageIO.read(new File("src//Sprites//Humans//" + chefType + "_front.png"));
+        } else if (table.getTableType().equals("TableB")) {
+            this.chefType = "chefB";
+            sprite = ImageIO.read(new File("src//Sprites//Humans//" + chefType + "_front.png"));
+        } else if (table.getTableType().equals("TableC")) {
+            this.chefType = "chefC";
+            sprite = ImageIO.read(new File("src//Sprites//Humans//" + chefType + "_front.png"));
+        }
+    }
+
+    public void updateSprite(String facingPos) throws IOException {
+        if (facingPos.equals("front")) {
+            this.setFacing("front");
+            sprite = ImageIO.read(new File("src//Sprites//Humans//" + chefType + "_front.png"));
+        } else if (facingPos.equals("back")) {
+            this.setFacing("back");
+            sprite = ImageIO.read(new File("src//Sprites//Humans//" + chefType + "_back.png"));
+        } else if (facingPos.equals("left")) {
+            this.setFacing("left");
+            sprite = ImageIO.read(new File("src//Sprites//Humans//" + chefType + "_left.png"));
+        } else if (facingPos.equals("right")) {
+            this.setFacing("right");
+            sprite = ImageIO.read(new File("src//Sprites//Humans//" + chefType + "_right.png"));
         }
 
     }
@@ -41,8 +67,12 @@ public class Chef implements Runnable {
     public void run() {
         Random random = new Random();
         while (go) {
-            movetoKitchen();
-            movetoCounter();
+            try {
+                movetoKitchen();
+                movetoCounter();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Cook(random.nextInt(4));
             }
         }
@@ -50,7 +80,7 @@ public class Chef implements Runnable {
 
     public void drawChef(Graphics g) {
         if (!inKitchen) {
-            g.drawImage(sprite,xPos,yPos,64,64,null);
+            g.drawImage(sprite,xPos,yPos,32,32,null);
         }
     }
 
@@ -62,62 +92,107 @@ public class Chef implements Runnable {
         }
     }
 
-    private void movetoKitchen() {
+    private void movetoKitchen() throws InterruptedException {
         Random random = new Random();
-        while (xPos > 160 + movementVariation) {
-            xPos--;
-            try {
+        if (this.chefType.equals("chefA")) {
+            while (xPos < 190 + movementVariation) {
+                try {
+                    updateSprite("right");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                xPos++;
                 Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            }
+        } else {
+            while (xPos > 190 + movementVariation) {
+                try {
+                    updateSprite("left");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                xPos--;
+                Thread.sleep(10);
             }
         }
-        while (yPos > 180 + movementVariation) {
+        while (yPos > 90 + movementVariation) {
+            try {
+                updateSprite("back");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             yPos--;
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            Thread.sleep(10);
         }
+
         inKitchen = true;
-        try {
-            if (random.nextInt(2) == 0) {
-                Thread.sleep(5000);
-            } else {
-                Thread.sleep(4000);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (random.nextInt(2) == 0) {
+            Thread.sleep(5000);
+        } else {
+            Thread.sleep(4000);
         }
     }
 
-    private void movetoCounter() {
-        inKitchen = false;
-        while (yPos < 260) {
-            yPos++;
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    private void movetoCounter() throws InterruptedException {
+        try {
+            updateSprite("front");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        while (xPos < 400 + movementVariation) {
-            xPos++;
-            try {
+        inKitchen = false;
+        while (yPos < 135) {
+            yPos++;
+            Thread.sleep(10);
+        }
+        if (chefType.equals("chefA")) {
+            while (xPos > 140 + movementVariation) {
+                try {
+                    updateSprite("left");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                xPos--;
                 Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            }
+        } else if (chefType.equals("chefB")) {
+            while (xPos < 260 + movementVariation) {
+                try {
+                    updateSprite("right");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                xPos++;
+                Thread.sleep(10);
+            }
+        } else if (chefType.equals("chefC")) {
+            while (xPos < 470 + movementVariation) {
+                try {
+                    updateSprite("right");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                xPos++;
+                Thread.sleep(10);
             }
         }
         try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
+            updateSprite("front");
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
+        Thread.sleep(300);
     }
 
     public Rectangle getChefCollider() {
         return new Rectangle(xPos,yPos,64,64);
+    }
+
+    public String getFacing() {
+        return facing;
+    }
+
+    public void setFacing(String facing) {
+        this.facing = facing;
     }
 }

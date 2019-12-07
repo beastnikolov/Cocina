@@ -1,7 +1,6 @@
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
@@ -23,6 +22,7 @@ public class Viewer extends Canvas implements Runnable {
     private Client client;
     private Table table;
     private Table tableB;
+    private Table tableC;
     private ArrayList<Chef> chefArrayList = new ArrayList<>();
     private ArrayList<Client> clientArrayList = new ArrayList<>();
     private ArrayList<Table> tableArrayList = new ArrayList<>();
@@ -37,14 +37,13 @@ public class Viewer extends Canvas implements Runnable {
         shop.setVisible(false);
         this.setBackground(Color.black);
         try {
-            tavernSprite = ImageIO.read(new File("src//ztavern.png"));
+            tavernSprite = ImageIO.read(new File("src//tavernmap.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         this.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent keyEvent) {
-
             }
 
             @Override
@@ -58,7 +57,6 @@ public class Viewer extends Canvas implements Runnable {
                     System.out.println("SHOP");
                     shop.setVisible(true);
                     inShop = true;
-
                 }
             }
         });
@@ -67,7 +65,7 @@ public class Viewer extends Canvas implements Runnable {
     @Override
     public void run() {
         try {
-            goldSprite = ImageIO.read(new File("src//zcoin.png"));
+            goldSprite = ImageIO.read(new File("src//Sprites//UI//gold.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,7 +75,7 @@ public class Viewer extends Canvas implements Runnable {
         createClients();
         while (go) {
             this.paint();
-            if (random.nextInt(50000) == 1) {
+            if (random.nextInt(10000) == 1) {
                 createClients();
             }
 
@@ -85,21 +83,27 @@ public class Viewer extends Canvas implements Runnable {
     }
 
     private void createChefs() {
-        chef = new Chef(1,table,400,260,random.nextInt(10));
+        chef = new Chef(1,table,130,135,random.nextInt(10));
         thread = new Thread(chef);
         thread.start();
         chefArrayList.add(chef);
-        chef = new Chef(2,tableB,400,260,random.nextInt(10));
+        chef = new Chef(2,tableB,260,135,random.nextInt(10));
+        thread = new Thread(chef);
+        chefArrayList.add(chef);
+        thread.start();
+        chef = new Chef(3,tableC,490,135,random.nextInt(10));
         thread = new Thread(chef);
         chefArrayList.add(chef);
         thread.start();
     }
 
     private void createTables() {
-        table = new Table(6,220,325,"Fish");
+        table = new Table(6,120,155,"TableA");
         tableArrayList.add(table);
-        tableB = new Table(6,480,325,"Cake");
+        tableB = new Table(6,250,155,"TableB");
         tableArrayList.add(tableB);
+        tableC = new Table(6,480,155,"TableC");
+        tableArrayList.add(tableC);
     }
 
     private void createClients() {
@@ -126,6 +130,7 @@ public class Viewer extends Canvas implements Runnable {
         graphics.drawString(String.valueOf(gold),965,740);
         graphics.drawString(String.valueOf(table.getDishes()),965,710);
         graphics.drawString(String.valueOf(tableB.getDishes()),965,680);
+        graphics.drawString(String.valueOf(tableC.getDishes()),965,650);
         for (Table t: tableArrayList) {
             t.drawTable(graphics);
             t.drawDishes(graphics);
@@ -150,10 +155,12 @@ public class Viewer extends Canvas implements Runnable {
         int movementVariation;
         Table tableChoice;
 
-        if (random.nextInt(2)==0) {
+        if (random.nextInt(3)==0) {
             tableChoice = table;
-        } else {
+        } else if (random.nextInt(3) == 1) {
             tableChoice = tableB;
+        } else {
+            tableChoice = tableC;
         }
         if (random.nextInt(2)==0){
             gender = "Male";

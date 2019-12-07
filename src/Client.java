@@ -19,6 +19,7 @@ public class Client implements Runnable {
     private Viewer viewer;
     private ArrayList<Client> clientArrayList;
     private boolean eaten = false;
+    private String facing = "front";
 
 
     public Client(int id,String name, Table table, int xPos, int yPos, String gender, ArrayList<Client> clientArrayList,int movementVariation,Viewer viewer) {
@@ -32,16 +33,29 @@ public class Client implements Runnable {
         this.movementVariation = movementVariation;
         this.viewer = viewer;
         try {
-            if (this.Gender.equals("Male")) {
-                sprite = ImageIO.read(new File("src//zman.png"));
-            } else {
-                sprite = ImageIO.read(new File("src//zwoman.png"));
-            }
+            updateSprite("front");
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void updateSprite(String facingPos) throws IOException {
+        if (facingPos.equals("front")) {
+            this.setFacing("front");
+            sprite = ImageIO.read(new File("src//Sprites//Humans//" + Gender.toLowerCase() + "_front.png"));
+        } else if (facingPos.equals("back")) {
+            this.setFacing("back");
+            sprite = ImageIO.read(new File("src//Sprites//Humans//" + Gender.toLowerCase() + "_back.png"));
+        } else if (facingPos.equals("left")) {
+            this.setFacing("left");
+            sprite = ImageIO.read(new File("src//Sprites//Humans//" + Gender.toLowerCase() + "_left.png"));
+        } else if (facingPos.equals("right")) {
+            this.setFacing("right");
+            sprite = ImageIO.read(new File("src//Sprites//Humans//" + Gender.toLowerCase() + "_right.png"));
+        }
 
     }
+
 
     @Override
     public void run() {
@@ -70,7 +84,7 @@ public class Client implements Runnable {
             yPos--;
             Thread.sleep(10);
         }
-        if (table.getTableType().equals("Fish")) {
+        if (table.getTableType().equals("TableA")) {
             while (xPos > table.getxPos() + 50 + movementVariation) {
                 xPos--;
                 Thread.sleep(10);
@@ -79,7 +93,7 @@ public class Client implements Runnable {
                 yPos--;
                 Thread.sleep(10);
             }
-        } else {
+        } else if (table.getTableType().equals("TableB")) {
             while (xPos < table.getxPos() + 50 + movementVariation) {
                 xPos++;
                 Thread.sleep(10);
@@ -93,7 +107,7 @@ public class Client implements Runnable {
     }
 
     private void movetoExit(Table table) throws InterruptedException {
-        if (table.getTableType().equals("Fish")) {
+        if (table.getTableType().equals("TableA")) {
             while (yPos < table.getyPos() +150 + movementVariation) {
                 yPos++;
                 Thread.sleep(10);
@@ -102,7 +116,7 @@ public class Client implements Runnable {
                 xPos++;
                 Thread.sleep(10);
             }
-        } else {
+        } else if (table.getTableType().equals("TableB")) {
             while (yPos < table.getyPos() + 150 + movementVariation) {
                 yPos++;
                 Thread.sleep(10);
@@ -117,6 +131,7 @@ public class Client implements Runnable {
             Thread.sleep(10);
         }
         leaveRestaurant();
+        System.out.println("Client: " + name + " | ID: " + id + " left.");
     }
 
     public void leaveRestaurant() {
@@ -126,24 +141,23 @@ public class Client implements Runnable {
 
 
     public void drawClient(Graphics g){
-        g.drawImage(sprite,xPos,yPos,64,64,null);
+        g.drawImage(sprite,xPos,yPos,32,32,null);
         g.setColor(Color.white);
         g.setFont(new Font("MS Gothic",Font.PLAIN,10));
-        g.drawString(name,xPos+20,yPos);
+        g.drawString(name,xPos+5,yPos);
     }
 
     private void takeDish() throws InterruptedException {
         Thread.sleep(200);
-        table.takeDish(id,name);
+        table.takeDish(this);
         Thread.sleep(100);
         pay();
-        eaten = true;
     }
 
     private void pay() {
-        if (table.getTableType().equals("Fish")) {
+        if (table.getTableType().equals("TableA")) {
             viewer.setGold(viewer.getGold() + 10);
-        } else {
+        } else if (table.getTableType().equals("TableB")) {
             viewer.setGold(viewer.getGold() + 5);
         }
     }
@@ -152,6 +166,35 @@ public class Client implements Runnable {
         return new Rectangle(xPos,yPos,64,64);
     }
 
+    public boolean isEaten() {
+        return eaten;
+    }
 
+    public void setEaten(boolean eaten) {
+        this.eaten = eaten;
+    }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getFacing() {
+        return facing;
+    }
+
+    public void setFacing(String facing) {
+        this.facing = facing;
+    }
 }
