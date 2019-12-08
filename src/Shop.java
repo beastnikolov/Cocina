@@ -186,7 +186,7 @@ public class Shop extends JFrame {
             } else {
                 if (viewer.getGold() >= price2) {
                     viewer.setGold(viewer.getGold() - price2);
-                    //Upgrade Client
+                    viewer.upgradeClientSpawnRate();
                     viewer.setStatisticUpgrades(viewer.getStatisticUpgrades() + 1);
                     AlertSuccess.setVisible(true);
                 } else {
@@ -224,7 +224,7 @@ public class Shop extends JFrame {
                 }
             }
         } else if (type.equals("upgradeTable3")) {
-            currentUpgrade = viewer.getUpgradeLevel("TableCs");
+            currentUpgrade = viewer.getUpgradeLevel("TableC");
             if (currentUpgrade == 2) {
                 AlertMax.setVisible(true);
                 return;

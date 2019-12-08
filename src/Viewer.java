@@ -37,6 +37,7 @@ public class Viewer extends Canvas implements Runnable {
     private String[] FnameArray = {"Laura","Sandra","Silvia","Maria","Lisa"};
     private Shop shop = new Shop(this);
     private Statistics statistics = new Statistics(this);
+    private int clientSpawnRate = 20000;
     private int statisticGoldEarned = 0;
     private int statisticClientsServed = 0;
     private int statisticReputation = 0;
@@ -136,7 +137,7 @@ public class Viewer extends Canvas implements Runnable {
         createClients();
         while (go) {
             this.paint();
-            if (random.nextInt(10000) == 1) {
+            if (random.nextInt(clientSpawnRate) == 1) {
                 createClients();
             }
 
@@ -197,7 +198,7 @@ public class Viewer extends Canvas implements Runnable {
         graphics.drawString(String.valueOf(tableC.getDishes()),940,224);
         ///
         graphics.drawString("Chef Cooking time: " + chef.getChefSpeed() + "ms",810,590);
-        graphics.drawString("Client Spawn rate: " + "500ms",810,605);
+        graphics.drawString("Client Spawn rate: 1 every " + clientSpawnRate,810,605);
         graphics.drawString("Table 1 Upgrade stage: " + table.getCurrentUpgrade(),810,620);
         graphics.drawString("Table 2 Upgrade stage: " + tableB.getCurrentUpgrade(),810,635);
         graphics.drawString("Table 3 Upgrade stage: " + tableC.getCurrentUpgrade(),810,650);
@@ -308,7 +309,13 @@ public class Viewer extends Canvas implements Runnable {
     public int getUpgradeLevel(String object) {
         int upgradeLevel = 0;
         if (object.equals("Client")) {
-            //
+            if (getClientSpawnRate() == 20000) {
+                upgradeLevel = 0;
+            } else if (getClientSpawnRate() == 15000) {
+                upgradeLevel = 1;
+            } else if (getClientSpawnRate() == 8000) {
+                upgradeLevel = 2;
+            }
         } else if (object.equals("Chef")) {
             upgradeLevel = chef.getUpgradeStage();
         } else if (object.equals("TableA")) {
@@ -319,6 +326,14 @@ public class Viewer extends Canvas implements Runnable {
             upgradeLevel = tableC.getCurrentUpgrade();
         }
         return upgradeLevel;
+    }
+
+    public void upgradeClientSpawnRate() {
+        if (getClientSpawnRate() == 20000) {
+            this.setClientSpawnRate(15000);
+        } else if (getClientSpawnRate() == 15000){
+            this.setClientSpawnRate(8000);
+        }
     }
 
 
@@ -362,5 +377,13 @@ public class Viewer extends Canvas implements Runnable {
 
     public void setStatisticUpgrades(int statisticUpgrades) {
         this.statisticUpgrades = statisticUpgrades;
+    }
+
+    public int getClientSpawnRate() {
+        return clientSpawnRate;
+    }
+
+    public void setClientSpawnRate(int clientSpawnRate) {
+        this.clientSpawnRate = clientSpawnRate;
     }
 }

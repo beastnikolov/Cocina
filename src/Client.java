@@ -172,6 +172,7 @@ public class Client implements Runnable {
     }
 
 
+
     public void drawClient(Graphics g){
         g.drawImage(sprite,xPos,yPos,32,32,null);
         g.setColor(Color.white);
