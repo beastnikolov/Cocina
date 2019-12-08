@@ -42,6 +42,8 @@ public class Viewer extends Canvas implements Runnable {
     private int statisticClientsServed = 0;
     private int statisticReputation = 0;
     private int statisticUpgrades = 0;
+    private BufferedImage smileyFace;
+    private BufferedImage smileyFaceBad;
 
 
     public Viewer(){
@@ -51,6 +53,8 @@ public class Viewer extends Canvas implements Runnable {
             currencyWindow = ImageIO.read(new File("src//Sprites//UI//currency.png"));
             controlsWindow = ImageIO.read(new File("src//Sprites//UI//controls.png"));
             upgradePost = ImageIO.read(new File("src//Sprites//UI//upgradepost.png"));
+            smileyFace = ImageIO.read(new File("src//Sprites//UI//smiley.png"));
+            smileyFaceBad = ImageIO.read(new File("src//Sprites//UI//smiley2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -160,11 +164,11 @@ public class Viewer extends Canvas implements Runnable {
     }
 
     private void createTables() {
-        table = new Table(6,120,155,"TableA");
+        table = new Table(0,120,155,"TableA");
         tableArrayList.add(table);
-        tableB = new Table(6,250,155,"TableB");
+        tableB = new Table(0,250,155,"TableB");
         tableArrayList.add(tableB);
-        tableC = new Table(6,480,155,"TableC");
+        tableC = new Table(0,480,155,"TableC");
         tableArrayList.add(tableC);
     }
 
@@ -215,7 +219,12 @@ public class Viewer extends Canvas implements Runnable {
         for (int i = clientArrayList.size()-1; i >= 0; i--) {
             if (clientArrayList.get(i)!=null) {
                 clientArrayList.get(i).drawClient(graphics);
-            }
+                if (clientArrayList.get(i).getSmiley() == 1) {
+                    graphics.drawImage(smileyFace,clientArrayList.get(i).getxPos()+8,clientArrayList.get(i).getyPos()-20,null);
+                } else if (clientArrayList.get(i).getSmiley() == 2) {
+                    graphics.drawImage(smileyFaceBad,clientArrayList.get(i).getxPos()+8,clientArrayList.get(i).getyPos()-25,null);
+                }
+             }
         }
         bs.show();
         super.paint(graphics);

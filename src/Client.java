@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Client implements Runnable {
     private int id;
@@ -20,6 +21,9 @@ public class Client implements Runnable {
     private ArrayList<Client> clientArrayList;
     private boolean eaten = false;
     private String facing = "back";
+    private int smiley = 0;
+    private long startTime;
+    private long finalTime;
 
 
     public Client(int id,String name, Table table, int xPos, int yPos, String gender, ArrayList<Client> clientArrayList,int movementVariation,Viewer viewer) {
@@ -68,8 +72,16 @@ public class Client implements Runnable {
                 e.printStackTrace();
             }
             try {
+                startTime = System.nanoTime();
                 takeDish();
                 if (eaten) {
+                    finalTime = System.nanoTime() - startTime;
+                    finalTime = TimeUnit.SECONDS.convert(finalTime, TimeUnit.NANOSECONDS);
+                    if (finalTime > 3) {
+                        smiley = 2;
+                    } else {
+                        smiley = 1;
+                    }
                     viewer.setStatisticClientsServed(viewer.getStatisticClientsServed() + 1);
                     movetoExit(table);
                 }
@@ -123,6 +135,7 @@ public class Client implements Runnable {
     }
 
     private void movetoExit(Table table) throws InterruptedException, IOException {
+        //smiley = 2;
         if (table.getTableType().equals("TableA")) {
             updateSprite("front");
             while (yPos < table.getyPos() +150 + movementVariation) {
@@ -157,6 +170,7 @@ public class Client implements Runnable {
                 Thread.sleep(10);
             }
         }
+        smiley = 0;
         updateSprite("front");
         while (yPos < 720) {
             yPos++;
@@ -236,5 +250,29 @@ public class Client implements Runnable {
 
     public void setFacing(String facing) {
         this.facing = facing;
+    }
+
+    public int getSmiley() {
+        return smiley;
+    }
+
+    public void setSmiley(int smiley) {
+        this.smiley = smiley;
+    }
+
+    public int getxPos() {
+        return xPos;
+    }
+
+    public void setxPos(int xPos) {
+        this.xPos = xPos;
+    }
+
+    public int getyPos() {
+        return yPos;
+    }
+
+    public void setyPos(int yPos) {
+        this.yPos = yPos;
     }
 }
