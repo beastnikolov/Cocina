@@ -1,5 +1,6 @@
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -23,9 +24,11 @@ public class Viewer extends Canvas implements Runnable {
     private Table table;
     private Table tableB;
     private Table tableC;
+    private Light light;
     private ArrayList<Chef> chefArrayList = new ArrayList<>();
     private ArrayList<Client> clientArrayList = new ArrayList<>();
     private ArrayList<Table> tableArrayList = new ArrayList<>();
+    private ArrayList<Light> lightArrayList = new ArrayList<>();
     private BufferedImage tavernSprite;
     private BufferedImage currencyWindow;
     private BufferedImage controlsWindow;
@@ -43,7 +46,7 @@ public class Viewer extends Canvas implements Runnable {
     public Viewer(){
         this.setBackground(new Color(25,25,25));
         try {
-            tavernSprite = ImageIO.read(new File("src//tavernmap.png"));
+            tavernSprite = ImageIO.read(new File("src//tavernv2.png"));
             currencyWindow = ImageIO.read(new File("src//Sprites//UI//currency.png"));
             controlsWindow = ImageIO.read(new File("src//Sprites//UI//controls.png"));
             upgradePost = ImageIO.read(new File("src//Sprites//UI//upgradepost.png"));
@@ -70,6 +73,50 @@ public class Viewer extends Canvas implements Runnable {
                 }
             }
         });
+
+    }
+
+    private void createLights() {
+        light = new Light(120,50);
+        lightArrayList.add(light);
+        thread = new Thread(light);
+        thread.start();
+        light = new Light(570,50);
+        lightArrayList.add(light);
+        thread = new Thread(light);
+        thread.start();
+        light = new Light(630,100);
+        lightArrayList.add(light);
+        thread = new Thread(light);
+        thread.start();
+        light = new Light(343,150);
+        lightArrayList.add(light);
+        thread = new Thread(light);
+        thread.start();
+        light = new Light(86,427);
+        lightArrayList.add(light);
+        thread = new Thread(light);
+        thread.start();
+        light = new Light(86,300);
+        lightArrayList.add(light);
+        thread = new Thread(light);
+        thread.start();
+        light = new Light(86,556);
+        lightArrayList.add(light);
+        thread = new Thread(light);
+        thread.start();
+        light = new Light(632,300);
+        lightArrayList.add(light);
+        thread = new Thread(light);
+        thread.start();
+        light = new Light(632,427);
+        lightArrayList.add(light);
+        thread = new Thread(light);
+        thread.start();
+        light = new Light(632,586);
+        lightArrayList.add(light);
+        thread = new Thread(light);
+        thread.start();
     }
 
 
@@ -83,6 +130,7 @@ public class Viewer extends Canvas implements Runnable {
             e.printStackTrace();
         }
         this.createBufferStrategy(2);
+        createLights();
         createTables();
         createChefs();
         createClients();
@@ -153,6 +201,9 @@ public class Viewer extends Canvas implements Runnable {
         graphics.drawString("Table 1 Upgrade stage: " + table.getCurrentUpgrade(),810,620);
         graphics.drawString("Table 2 Upgrade stage: " + tableB.getCurrentUpgrade(),810,635);
         graphics.drawString("Table 3 Upgrade stage: " + tableC.getCurrentUpgrade(),810,650);
+        for (Light l: lightArrayList) {
+            l.paint(graphics);
+        }
         for (Table t: tableArrayList) {
             t.drawTable(graphics);
             t.drawDishes(graphics);
