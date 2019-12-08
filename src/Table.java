@@ -12,6 +12,7 @@ public class Table {
     private int xPos;
     private int yPos;
     private int currentUpgrade = 0;
+    private int dishPrice = 6;
 
 
     public Table(int dishes,int xPos,int yPos,String tableType) {
@@ -152,5 +153,13 @@ public class Table {
 
     public void setCurrentUpgrade(int currentUpgrade) {
         this.currentUpgrade = currentUpgrade;
+    }
+
+    public int getDishPrice() {
+        return dishPrice;
+    }
+
+    public void setDishPrice(int dishPrice) {
+        this.dishPrice = dishPrice;
     }
 }

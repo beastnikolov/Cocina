@@ -203,8 +203,10 @@ public class Viewer extends Canvas implements Runnable {
         if (tableType.equals("TableA")) {
             if (table.getCurrentUpgrade() == 0) {
                 table.setCurrentUpgrade(1);
+                table.setDishPrice(10);
             } else if (table.getCurrentUpgrade() == 1) {
                 table.setCurrentUpgrade(2);
+                table.setDishPrice(14);
             }
             try {
                 table.loadTableSprites();
@@ -214,8 +216,10 @@ public class Viewer extends Canvas implements Runnable {
         } else if (tableType.equals("TableB")) {
             if (tableB.getCurrentUpgrade() == 0) {
                 tableB.setCurrentUpgrade(1);
+                tableB.setDishPrice(10);
             } else if (tableB.getCurrentUpgrade() == 1) {
                 tableB.setCurrentUpgrade(2);
+                tableB.setDishPrice(14);
             }
             try {
                 tableB.loadTableSprites();
@@ -225,8 +229,10 @@ public class Viewer extends Canvas implements Runnable {
         } else if (tableType.equals("TableC")) {
             if (tableC.getCurrentUpgrade() == 0) {
                 tableC.setCurrentUpgrade(1);
+                tableC.setDishPrice(10);
             } else if (tableC.getCurrentUpgrade() == 1) {
                 tableC.setCurrentUpgrade(2);
+                tableC.setDishPrice(14);
             }
             try {
                 tableC.loadTableSprites();

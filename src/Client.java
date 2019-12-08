@@ -163,7 +163,7 @@ public class Client implements Runnable {
             Thread.sleep(10);
         }
         leaveRestaurant();
-        System.out.println("Client: " + name + " | ID: " + id + " left.");
+        //System.out.println("Client: " + name + " | ID: " + id + " left.");
     }
 
     public void leaveRestaurant() {
@@ -187,15 +187,16 @@ public class Client implements Runnable {
     }
 
     private void pay() {
+        //System.out.println(table.getTableType() + " | Current dish price: " + table.getDishPrice());
         if (table.getTableType().equals("TableA")) {
-            viewer.setGold(viewer.getGold() + 10);
-            viewer.setStatisticGoldEarned(viewer.getStatisticGoldEarned() + 10);
+            viewer.setGold(viewer.getGold() + table.getDishPrice());
+            viewer.setStatisticGoldEarned(viewer.getStatisticGoldEarned() + table.getDishPrice());
         } else if (table.getTableType().equals("TableB")) {
-            viewer.setGold(viewer.getGold() + 5);
-            viewer.setStatisticGoldEarned(viewer.getStatisticGoldEarned() + 5);
+            viewer.setGold(viewer.getGold() + (table.getDishPrice() - 2));
+            viewer.setStatisticGoldEarned(viewer.getStatisticGoldEarned() + (table.getDishPrice() - 2));
         } else if (table.getTableType().equals("TableC")) {
-            viewer.setGold(viewer.getGold() + 3);
-            viewer.setStatisticGoldEarned(viewer.getStatisticGoldEarned() + 3);
+            viewer.setGold(viewer.getGold() + (table.getDishPrice() - 4));
+            viewer.setStatisticGoldEarned(viewer.getStatisticGoldEarned() + (table.getDishPrice() - 4));
         }
 
     }
