@@ -19,7 +19,7 @@ public class Client implements Runnable {
     private Viewer viewer;
     private ArrayList<Client> clientArrayList;
     private boolean eaten = false;
-    private String facing = "front";
+    private String facing = "back";
 
 
     public Client(int id,String name, Table table, int xPos, int yPos, String gender, ArrayList<Client> clientArrayList,int movementVariation,Viewer viewer) {
@@ -33,7 +33,7 @@ public class Client implements Runnable {
         this.movementVariation = movementVariation;
         this.viewer = viewer;
         try {
-            updateSprite("front");
+            updateSprite("back");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,41 +64,57 @@ public class Client implements Runnable {
             try {
                 movetoTable(table);
 
-            } catch (InterruptedException e) {
+            } catch (InterruptedException |IOException e) {
                 e.printStackTrace();
             }
             try {
                 takeDish();
                 if (eaten) {
+                    viewer.setStatisticClientsServed(viewer.getStatisticClientsServed() + 1);
                     movetoExit(table);
                 }
-            } catch (InterruptedException e) {
+            } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
             }
             }
         }
 
 
-    private void movetoTable(Table table) throws InterruptedException {
-        while (yPos > table.getyPos() + 140 + movementVariation) {
+    private void movetoTable(Table table) throws InterruptedException, IOException {
+        while (yPos > table.getyPos() + 125 + movementVariation) {
             yPos--;
             Thread.sleep(10);
         }
         if (table.getTableType().equals("TableA")) {
-            while (xPos > table.getxPos() + 50 + movementVariation) {
+            updateSprite("left");
+            while (xPos > table.getxPos() + 20 + movementVariation) {
                 xPos--;
                 Thread.sleep(10);
             }
-            while (yPos > table.getyPos() + 100 + movementVariation) {
+            updateSprite("back");
+            while (yPos > table.getyPos() + 45) {
                 yPos--;
                 Thread.sleep(10);
             }
         } else if (table.getTableType().equals("TableB")) {
-            while (xPos < table.getxPos() + 50 + movementVariation) {
+            updateSprite("left");
+            while (xPos > table.getxPos() + 20) {
+                xPos--;
+                Thread.sleep(10);
+            }
+            updateSprite("back");
+            while (yPos > table.getyPos() + 45) {
+                yPos--;
+                Thread.sleep(10);
+            }
+        } else if (table.getTableType().equals("TableC")) {
+            updateSprite("right");
+            while (xPos < table.getxPos() + 20 + movementVariation) {
                 xPos++;
                 Thread.sleep(10);
             }
-            while (yPos > table.getyPos() + 100 + movementVariation) {
+            updateSprite("back");
+            while (yPos > table.getyPos() + 45) {
                 yPos--;
                 Thread.sleep(10);
             }
@@ -106,26 +122,42 @@ public class Client implements Runnable {
 
     }
 
-    private void movetoExit(Table table) throws InterruptedException {
+    private void movetoExit(Table table) throws InterruptedException, IOException {
         if (table.getTableType().equals("TableA")) {
+            updateSprite("front");
             while (yPos < table.getyPos() +150 + movementVariation) {
                 yPos++;
                 Thread.sleep(10);
             }
-            while (xPos < table.getxPos() + 200 + movementVariation) {
+            updateSprite("right");
+            while (xPos < table.getxPos() + 240 + movementVariation) {
                 xPos++;
                 Thread.sleep(10);
             }
         } else if (table.getTableType().equals("TableB")) {
+            updateSprite("front");
             while (yPos < table.getyPos() + 150 + movementVariation) {
                 yPos++;
                 Thread.sleep(10);
             }
-            while (xPos > table.getxPos() - 50 + movementVariation) {
+            updateSprite("right");
+            while (xPos < table.getxPos() + 110 + movementVariation) {
+                xPos++;
+                Thread.sleep(10);
+            }
+        } else if (table.getTableType().equals("TableC")) {
+            updateSprite("front");
+            while (yPos < table.getyPos() + 125 + movementVariation) {
+                yPos++;
+                Thread.sleep(10);
+            }
+            updateSprite("left");
+            while (xPos > table.getxPos() - (100 + movementVariation)) {
                 xPos--;
                 Thread.sleep(10);
             }
         }
+        updateSprite("front");
         while (yPos < 720) {
             yPos++;
             Thread.sleep(10);
@@ -157,9 +189,15 @@ public class Client implements Runnable {
     private void pay() {
         if (table.getTableType().equals("TableA")) {
             viewer.setGold(viewer.getGold() + 10);
+            viewer.setStatisticGoldEarned(viewer.getStatisticGoldEarned() + 10);
         } else if (table.getTableType().equals("TableB")) {
             viewer.setGold(viewer.getGold() + 5);
+            viewer.setStatisticGoldEarned(viewer.getStatisticGoldEarned() + 5);
+        } else if (table.getTableType().equals("TableC")) {
+            viewer.setGold(viewer.getGold() + 3);
+            viewer.setStatisticGoldEarned(viewer.getStatisticGoldEarned() + 3);
         }
+
     }
 
     public Rectangle getClientCollider() {

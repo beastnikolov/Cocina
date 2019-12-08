@@ -8,6 +8,7 @@ import java.util.Random;
 
 public class Chef implements Runnable {
     private int id;
+    private String name;
     private boolean inKitchen = false;
     private boolean go = true;
     private Table table;
@@ -17,9 +18,12 @@ public class Chef implements Runnable {
     private int movementVariation;
     private String facing = "front";
     private String chefType = "";
+    private int chefSpeed = 4000;
+    private int upgradeStage = 0;
 
-    public Chef(int id,Table table,int xPos, int yPos,int movementVariation) {
+    public Chef(int id,String name, Table table,int xPos, int yPos,int movementVariation) {
         this.id = id;
+        this.name = name;
         this.table = table;
         this.xPos = xPos;
         this.yPos = yPos;
@@ -81,6 +85,9 @@ public class Chef implements Runnable {
     public void drawChef(Graphics g) {
         if (!inKitchen) {
             g.drawImage(sprite,xPos,yPos,32,32,null);
+            g.setColor(Color.white);
+            g.setFont(new Font("MS Gothic",Font.PLAIN,10));
+            g.drawString(name,xPos,yPos-5);
         }
     }
 
@@ -127,9 +134,9 @@ public class Chef implements Runnable {
 
         inKitchen = true;
         if (random.nextInt(2) == 0) {
-            Thread.sleep(5000);
+            Thread.sleep(chefSpeed + 1000);
         } else {
-            Thread.sleep(4000);
+            Thread.sleep(chefSpeed);
         }
     }
 
@@ -194,5 +201,21 @@ public class Chef implements Runnable {
 
     public void setFacing(String facing) {
         this.facing = facing;
+    }
+
+    public int getChefSpeed() {
+        return chefSpeed;
+    }
+
+    public void setChefSpeed(int chefSpeed) {
+        this.chefSpeed = chefSpeed;
+    }
+
+    public int getUpgradeStage() {
+        return upgradeStage;
+    }
+
+    public void setUpgradeStage(int upgradeStage) {
+        this.upgradeStage = upgradeStage;
     }
 }

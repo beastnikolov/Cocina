@@ -27,17 +27,26 @@ public class Viewer extends Canvas implements Runnable {
     private ArrayList<Client> clientArrayList = new ArrayList<>();
     private ArrayList<Table> tableArrayList = new ArrayList<>();
     private BufferedImage tavernSprite;
+    private BufferedImage currencyWindow;
+    private BufferedImage controlsWindow;
+    private BufferedImage upgradePost;
     private String[] MnameArray = {"Mario","Pere","Jose","Sergi","Toni","Pepe"};
     private String[] FnameArray = {"Laura","Sandra","Silvia","Maria","Lisa"};
-    private boolean inShop = false;
+    private Shop shop = new Shop(this);
+    private Statistics statistics = new Statistics(this);
+    private int statisticGoldEarned = 0;
+    private int statisticClientsServed = 0;
+    private int statisticReputation = 0;
+    private int statisticUpgrades = 0;
 
 
     public Viewer(){
-        Shop shop = new Shop(this);
-        shop.setVisible(false);
-        this.setBackground(Color.black);
+        this.setBackground(new Color(25,25,25));
         try {
             tavernSprite = ImageIO.read(new File("src//tavernmap.png"));
+            currencyWindow = ImageIO.read(new File("src//Sprites//UI//currency.png"));
+            controlsWindow = ImageIO.read(new File("src//Sprites//UI//controls.png"));
+            upgradePost = ImageIO.read(new File("src//Sprites//UI//upgradepost.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -54,16 +63,20 @@ public class Viewer extends Canvas implements Runnable {
             public void keyReleased(KeyEvent keyEvent) {
                 int key = keyEvent.getKeyCode();
                 if (key == KeyEvent.VK_B) {
-                    System.out.println("SHOP");
-                    shop.setVisible(true);
-                    inShop = true;
+                   shop.setVisible(true);
+                }
+                if (key == KeyEvent.VK_N) {
+                    statistics.setVisible(true);
                 }
             }
         });
     }
 
+
     @Override
     public void run() {
+        thread = new Thread(statistics);
+        thread.start();
         try {
             goldSprite = ImageIO.read(new File("src//Sprites//UI//gold.png"));
         } catch (IOException e) {
@@ -83,15 +96,15 @@ public class Viewer extends Canvas implements Runnable {
     }
 
     private void createChefs() {
-        chef = new Chef(1,table,130,135,random.nextInt(10));
+        chef = new Chef(1,"Ramsey",table,130,135,random.nextInt(10));
         thread = new Thread(chef);
         thread.start();
         chefArrayList.add(chef);
-        chef = new Chef(2,tableB,260,135,random.nextInt(10));
+        chef = new Chef(2,"Chicote",tableB,260,135,random.nextInt(10));
         thread = new Thread(chef);
         chefArrayList.add(chef);
         thread.start();
-        chef = new Chef(3,tableC,490,135,random.nextInt(10));
+        chef = new Chef(3,"Thomas",tableC,490,135,random.nextInt(10));
         thread = new Thread(chef);
         chefArrayList.add(chef);
         thread.start();
@@ -126,11 +139,20 @@ public class Viewer extends Canvas implements Runnable {
         graphics.drawImage(tavernSprite,0,0,null);
         graphics.setColor(Color.white);
         graphics.setFont(new Font("MS Gothic",Font.PLAIN,10));
-        graphics.drawImage(goldSprite,930,720,null);
-        graphics.drawString(String.valueOf(gold),965,740);
-        graphics.drawString(String.valueOf(table.getDishes()),965,710);
-        graphics.drawString(String.valueOf(tableB.getDishes()),965,680);
-        graphics.drawString(String.valueOf(tableC.getDishes()),965,650);
+        graphics.drawImage(currencyWindow,780,50,null);
+        graphics.drawImage(controlsWindow,780,300,null);
+        graphics.drawImage(upgradePost,780,500,null);
+        graphics.drawImage(goldSprite,810,132,32,32,null);
+        graphics.drawString(String.valueOf(gold),940,152);
+        graphics.drawString(String.valueOf(table.getDishes()),940,176);
+        graphics.drawString(String.valueOf(tableB.getDishes()),940,200);
+        graphics.drawString(String.valueOf(tableC.getDishes()),940,224);
+        ///
+        graphics.drawString("Chef Cooking time: " + chef.getChefSpeed() + "ms",810,590);
+        graphics.drawString("Client Spawn rate: " + "500ms",810,605);
+        graphics.drawString("Table 1 Upgrade stage: " + table.getCurrentUpgrade(),810,620);
+        graphics.drawString("Table 2 Upgrade stage: " + tableB.getCurrentUpgrade(),810,635);
+        graphics.drawString("Table 3 Upgrade stage: " + tableC.getCurrentUpgrade(),810,650);
         for (Table t: tableArrayList) {
             t.drawTable(graphics);
             t.drawDishes(graphics);
@@ -174,7 +196,72 @@ public class Viewer extends Canvas implements Runnable {
         }
         movementVariation = random.nextInt(10);
         client_id++;
-        return new Client(client_id,name,tableChoice,430,720,gender,clientArrayList,movementVariation,this);
+        return new Client(client_id,name,tableChoice,370,720,gender,clientArrayList,movementVariation,this);
+    }
+
+    public void upgradeTable(String tableType) {
+        if (tableType.equals("TableA")) {
+            if (table.getCurrentUpgrade() == 0) {
+                table.setCurrentUpgrade(1);
+            } else if (table.getCurrentUpgrade() == 1) {
+                table.setCurrentUpgrade(2);
+            }
+            try {
+                table.loadTableSprites();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (tableType.equals("TableB")) {
+            if (tableB.getCurrentUpgrade() == 0) {
+                tableB.setCurrentUpgrade(1);
+            } else if (tableB.getCurrentUpgrade() == 1) {
+                tableB.setCurrentUpgrade(2);
+            }
+            try {
+                tableB.loadTableSprites();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (tableType.equals("TableC")) {
+            if (tableC.getCurrentUpgrade() == 0) {
+                tableC.setCurrentUpgrade(1);
+            } else if (tableC.getCurrentUpgrade() == 1) {
+                tableC.setCurrentUpgrade(2);
+            }
+            try {
+                tableC.loadTableSprites();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void upgradeChef() {
+        for (Chef c: chefArrayList) {
+            if (c.getUpgradeStage() == 0) {
+                c.setChefSpeed(2000);
+                c.setUpgradeStage(1);
+            } else if (c.getUpgradeStage() == 1) {
+                c.setChefSpeed(200);
+                c.setUpgradeStage(2);
+            }
+        }
+    }
+
+    public int getUpgradeLevel(String object) {
+        int upgradeLevel = 0;
+        if (object.equals("Client")) {
+            //
+        } else if (object.equals("Chef")) {
+            upgradeLevel = chef.getUpgradeStage();
+        } else if (object.equals("TableA")) {
+            upgradeLevel = table.getCurrentUpgrade();
+        } else if (object.equals("TableB")) {
+            upgradeLevel = tableB.getCurrentUpgrade();
+        } else if (object.equals("TableC")) {
+            upgradeLevel = tableC.getCurrentUpgrade();
+        }
+        return upgradeLevel;
     }
 
 
@@ -188,4 +275,35 @@ public class Viewer extends Canvas implements Runnable {
         Viewer.gold = gold;
     }
 
+    public int getStatisticGoldEarned() {
+        return statisticGoldEarned;
+    }
+
+    public void setStatisticGoldEarned(int statisticGoldEarned) {
+        this.statisticGoldEarned = statisticGoldEarned;
+    }
+
+    public int getStatisticClientsServed() {
+        return statisticClientsServed;
+    }
+
+    public void setStatisticClientsServed(int statisticClientsServed) {
+        this.statisticClientsServed = statisticClientsServed;
+    }
+
+    public int getStatisticReputation() {
+        return statisticReputation;
+    }
+
+    public void setStatisticReputation(int statisticReputation) {
+        this.statisticReputation = statisticReputation;
+    }
+
+    public int getStatisticUpgrades() {
+        return statisticUpgrades;
+    }
+
+    public void setStatisticUpgrades(int statisticUpgrades) {
+        this.statisticUpgrades = statisticUpgrades;
+    }
 }

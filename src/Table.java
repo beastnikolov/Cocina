@@ -11,7 +11,7 @@ public class Table {
     private String tableType;
     private int xPos;
     private int yPos;
-    private int currentUpgrade = 2;
+    private int currentUpgrade = 0;
 
 
     public Table(int dishes,int xPos,int yPos,String tableType) {
@@ -66,13 +66,13 @@ public class Table {
         g.setColor(Color.red);
         if (tableType.equals("TableA")) {
             whiteSpace = 0;
-            g.drawImage(dishSprite,930,695,16,16,null);
+            g.drawImage(dishSprite,818,165,16,16,null);
         } else if (tableType.equals("TableB")) {
             whiteSpace = 0;
-            g.drawImage(dishSprite,930,665,16,16,null);
+            g.drawImage(dishSprite,818,192,16,16,null);
         } else if (tableType.equals("TableC")) {
             whiteSpace = 0;
-            g.drawImage(dishSprite,930,635,16,16,null);
+            g.drawImage(dishSprite,818,215,16,16,null);
         }
         for (int i = 0; i < dishes; i++) {
             g.drawImage(dishSprite,xPos+whiteSpace, yPos+20,16,16, null);
@@ -144,5 +144,13 @@ public class Table {
 
     public void setTableType(String tableType) {
         this.tableType = tableType;
+    }
+
+    public int getCurrentUpgrade() {
+        return currentUpgrade;
+    }
+
+    public void setCurrentUpgrade(int currentUpgrade) {
+        this.currentUpgrade = currentUpgrade;
     }
 }
