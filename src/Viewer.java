@@ -1,13 +1,16 @@
 
+import javafx.scene.media.MediaPlayer;
+
 import javax.imageio.ImageIO;
+import javax.print.attribute.standard.Media;
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Random;
@@ -25,10 +28,14 @@ public class Viewer extends Canvas implements Runnable {
     private Table tableB;
     private Table tableC;
     private Light light;
+    private NPC npc;
+    private ChristmasLight christmasLight;
     private ArrayList<Chef> chefArrayList = new ArrayList<>();
     private ArrayList<Client> clientArrayList = new ArrayList<>();
     private ArrayList<Table> tableArrayList = new ArrayList<>();
     private ArrayList<Light> lightArrayList = new ArrayList<>();
+    private ArrayList<NPC> npcArrayList = new ArrayList<>();
+    private ArrayList<ChristmasLight> christmasLightArrayList = new ArrayList<>();
     private BufferedImage tavernSprite;
     private BufferedImage currencyWindow;
     private BufferedImage controlsWindow;
@@ -44,12 +51,13 @@ public class Viewer extends Canvas implements Runnable {
     private int statisticUpgrades = 0;
     private BufferedImage smileyFace;
     private BufferedImage smileyFaceBad;
+    private Clip clip;
 
 
     public Viewer(){
         this.setBackground(new Color(25,25,25));
         try {
-            tavernSprite = ImageIO.read(new File("src//tavernv2.png"));
+            tavernSprite = ImageIO.read(new File("src//tavernv3.png"));
             currencyWindow = ImageIO.read(new File("src//Sprites//UI//currency.png"));
             controlsWindow = ImageIO.read(new File("src//Sprites//UI//controls.png"));
             upgradePost = ImageIO.read(new File("src//Sprites//UI//upgradepost.png"));
@@ -76,9 +84,31 @@ public class Viewer extends Canvas implements Runnable {
                 if (key == KeyEvent.VK_N) {
                     statistics.setVisible(true);
                 }
+                if (key == KeyEvent.VK_M) {
+                    if (clip.isActive()) {
+                        clip.stop();
+                    } else {
+                        clip.start();
+                    }
+                }
             }
         });
 
+    }
+
+    private void createNPCs() {
+        npc = new NPC("Santa",66,330,1);
+        npcArrayList.add(npc);
+        thread = new Thread(npc);
+        thread.start();
+        npc = new NPC("Jumi",666,285,2);
+        npcArrayList.add(npc);
+        thread = new Thread(npc);
+        thread.start();
+        npc = new NPC("Rat",466,285,3);
+        npcArrayList.add(npc);
+        thread = new Thread(npc);
+        thread.start();
     }
 
     private void createLights() {
@@ -122,6 +152,182 @@ public class Viewer extends Canvas implements Runnable {
         lightArrayList.add(light);
         thread = new Thread(light);
         thread.start();
+        christmasLight = new ChristmasLight(170,35);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(185,35);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(200,35);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(475,30);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(460,30);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(445,30);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(60,30);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(35,40);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(65,60);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(40,85);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(70,90);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(90,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(105,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(120,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(135,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(150,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(165,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(180,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(195,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(210,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(225,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(240,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(255,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(270,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(285,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(300,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(315,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(330,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(345,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(360,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(375,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(390,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(405,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(420,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(435,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(450,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(465,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(480,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(495,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(510,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(525,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(540,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(555,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
+        christmasLight = new ChristmasLight(570,180);
+        christmasLightArrayList.add(christmasLight);
+        thread = new Thread(christmasLight);
+        thread.start();
     }
 
 
@@ -135,9 +341,11 @@ public class Viewer extends Canvas implements Runnable {
             e.printStackTrace();
         }
         this.createBufferStrategy(2);
+        playMusic();
         createLights();
         createTables();
         createChefs();
+        createNPCs();
         createClients();
         while (go) {
             this.paint();
@@ -209,12 +417,18 @@ public class Viewer extends Canvas implements Runnable {
         for (Light l: lightArrayList) {
             l.paint(graphics);
         }
+        for (ChristmasLight cl: christmasLightArrayList) {
+            cl.paint(graphics);
+        }
         for (Table t: tableArrayList) {
             t.drawTable(graphics);
             t.drawDishes(graphics);
         }
         for (Chef c: chefArrayList) {
             c.drawChef(graphics);
+        }
+        for (NPC npc: npcArrayList) {
+            npc.drawNPC(graphics);
         }
         for (int i = clientArrayList.size()-1; i >= 0; i--) {
             if (clientArrayList.get(i)!=null) {
@@ -343,6 +557,28 @@ public class Viewer extends Canvas implements Runnable {
         } else if (getClientSpawnRate() == 15000){
             this.setClientSpawnRate(8000);
         }
+    }
+
+    private void playMusic() {
+        File musicPath = new File("src//Music//track.wav");
+        InputStream in = null;
+        try {
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(musicPath);
+            clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+            clip.start();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 
